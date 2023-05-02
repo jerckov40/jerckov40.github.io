@@ -35,6 +35,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final TextEditingController _tfc = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    _tfc.text = '1713';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,21 +49,37 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () => printBarcode(),
-              child: const Text('Print'),
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 200,
+                child: TextField(
+                  controller: _tfc,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                  ),
+                  enabled: true,
+                  keyboardType: TextInputType.number,
+                ),
+              ),
+              const SizedBox(width: 20),
+              ElevatedButton(
+                onPressed: () => printBarcode(),
+                child: const Text('Print'),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   Future<void> printBarcode() async {
-    final String file = await printCode('1713');
+    final String file = await printCode(_tfc.text);
     if (file.isNotEmpty) await openFile(file);
   }
 
